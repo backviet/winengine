@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+
+using WinEngine.Screen.View;
 
 using WinEngine.Entity;
 
@@ -21,6 +21,11 @@ namespace WinEngine.Screen.Scene
         //================================================================
         protected string idName = null;
 
+        //private List<Layer> layers;
+        //private List<BaseView> views;
+
+        //private HUD hud;
+
         //================================================================
         //Constructors
         //================================================================
@@ -28,6 +33,8 @@ namespace WinEngine.Screen.Scene
             : base(0, 0)
         {
             this.idName = name;
+            //layers = new List<Layer>();
+            //views = new List<BaseView>();
         }
 
         //================================================================
@@ -39,9 +46,99 @@ namespace WinEngine.Screen.Scene
         public bool IsShutDown { get; set; }
         public bool IsCreated { get; private set; }
 
+        //public void SetHud(ref HUD hud)
+        //{
+        //    this.hud = hud;
+        //}
+
+        //public HUD GetHud()
+        //{
+        //    return this.hud;
+        //}
+
         //================================================================
         //Methodes
         //================================================================
+
+        #region Phat trien ve sau
+
+        //public void AddLayer(ref Layer layer)
+        //{
+        //    this.layers.Add(layer);
+        //}
+
+        //public void AddLayer(ref Layer layer, int index)
+        //{
+        //    this.layers.Insert(index, layer);
+        //}
+
+        //public void RemoveLayer(ref Layer layer)
+        //{
+        //    layers.Remove(layer);
+        //}
+
+        //public void RemoveLayer(int index)
+        //{
+        //    layers.RemoveAt(index);
+        //}
+
+        //public void AddView(ref BaseView view)
+        //{
+        //    views.Add(view);
+        //}
+
+        //public void AddView(ref BaseView view, int index)
+        //{
+        //    views.Insert(index, view);
+        //}
+
+        //public void RemoveView(ref BaseView view)
+        //{
+        //    views.Remove(view);
+        //}
+
+        //public void RemoveView(int index)
+        //{
+        //    views.RemoveAt(index);
+        //}
+
+        //public virtual void Update(GameTime gameTime)
+        //{
+        //    foreach (Layer layer in layers)
+        //    {
+        //        layer.Update(gameTime);
+        //    }
+
+        //    if (hud != null)
+        //    {
+        //        hud.Update(gameTime);
+        //    }
+
+        //    foreach (BaseView view in views)
+        //    {
+        //        view.Update(gameTime);
+        //    }
+        //}
+
+        //public virtual void Draw()
+        //{
+        //    foreach (Layer layer in layers)
+        //    {
+        //        layer.Draw();
+        //    }
+
+        //    if (hud != null)
+        //    {
+        //        hud.Draw();
+        //    }
+
+        //    foreach (BaseView view in views)
+        //    {
+        //        view.Draw();
+        //    }
+        //}
+        #endregion
+
         public virtual void Create()
         {
             IsCreated = true;

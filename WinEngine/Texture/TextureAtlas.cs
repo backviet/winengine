@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Diagnostics;
 using System.Globalization;
 
 using System.Xml;
@@ -18,7 +17,6 @@ namespace WinEngine.Texture
 
         public TextureRegion Region(string name)
         {
-            //Debug.WriteLine(name);
             if (regions.ContainsKey(name))
             {
                 return regions[name];

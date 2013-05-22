@@ -1,13 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using WinEngine.Texture;
-
-namespace WinEngine.Entity.UI
+namespace WinEngine
 {
-    public class Image : Widget
+    class Template
     {
         //================================================================
         //Constants
@@ -16,24 +14,16 @@ namespace WinEngine.Entity.UI
         //================================================================
         //Fields
         //================================================================
-        private TextureRegion region;
-
+        
         //================================================================
         //Constructors
         //================================================================
-        public Image(Vector2 position, TextureRegion region)
-            : base(position)
-        {
-            this.region = region;
-            Width = region.Bounds.Width;
-            Height = region.Bounds.Height;
-        }
-
+        
         //================================================================
         //Getter and Setter
         //================================================================
-        public TextureRegion Region { get { return region; } set { this.region = value; } }
-
+        #region 
+        #endregion
         //================================================================
         //Methodes
         //================================================================
@@ -43,15 +33,9 @@ namespace WinEngine.Entity.UI
         //Methodes overridde
         //================================================================
         #region
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (Visible)
-            {
-                spriteBatch.Draw(region.Texture, Position, region.Bounds,
-                    Color.Lerp(Color.White, Color.Transparent, Alpha), Rotation, Origin, Scaling, Flip, 0);
-            }
-            base.Draw(spriteBatch);
-        }
         #endregion
+        // ===============================================================
+        // Inner and Anonymous Classes
+        // ===============================================================
     }
 }

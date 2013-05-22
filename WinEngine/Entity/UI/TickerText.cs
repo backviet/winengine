@@ -15,6 +15,8 @@ namespace WinEngine.Entity.UI
         //================================================================
         //Fields
         //================================================================
+        public event Action<TickerText> ActionFinish;
+
         private StringBuilder builder;
 
         private int characterPerSecond = 0;
@@ -22,7 +24,11 @@ namespace WinEngine.Entity.UI
         private double duration;
         private double elapsedTime = 0;
 
+        private double count = 0;
+        private double timeDisplay;
+
         private bool isFinish = false;
+        public bool isVisibleWhenFinish = false;
 
         //================================================================
         //Constructors
@@ -62,6 +68,12 @@ namespace WinEngine.Entity.UI
             set { duration = value; }
         }
 
+        public double Display
+        {
+            get { return timeDisplay; }
+            set { timeDisplay = value; }
+        }
+
         #endregion
         //================================================================
         //Methodes
@@ -89,7 +101,6 @@ namespace WinEngine.Entity.UI
                 spriteBatch.DrawString(Font, t, Position, Color.Lerp(Color, Color.Transparent, Alpha),
                     Rotation, Origin, Scaling, Flip, 0);
             }
-            base.Draw(spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
@@ -100,10 +111,36 @@ namespace WinEngine.Entity.UI
                 this.elapsedTime = Math.Min(this.duration, this.elapsedTime + gameTime.ElapsedGameTime.TotalSeconds);
                 this.characterVisible = (int)(this.elapsedTime * this.characterPerSecond);
                 if (characterVisible == TextRender.Length)
+                {
                     isFinish = true;
+                    if (ActionFinish != null)
+                    {
+                        ActionFinish(this);
+                    }
+                }
+            }
+            else
+            {
+                if (isVisibleWhenFinish)
+                {
+                    count += gameTime.ElapsedGameTime.TotalSeconds;
+
+                    if (count >= timeDisplay)
+                    {
+                        Visible = false;
+                    }
+                }
             }
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+            builder.Clear();
+            elapsedTime = 0;
+            characterVisible = 0;
+            count = 0;
+        }
         #endregion
         // ===============================================================
         // Inner and Anonymous Classes

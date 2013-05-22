@@ -1,13 +1,9 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using WinEngine.Util.Interpolation;
 
-using WinEngine.Util;
-using WinEngine.Screen;
-using WinEngine.Entity.Modifier;
 
-namespace WinEngine.Entity.UI
+namespace WinEngine.Entity.Modifier
 {
-    public class Text : Widget
+    public class ScaleModifier : SingleSpanEntityModifier
     {
         //================================================================
         //Constants
@@ -16,39 +12,24 @@ namespace WinEngine.Entity.UI
         //================================================================
         //Fields
         //================================================================
-        private string text;
 
         //================================================================
         //Constructors
         //================================================================
-        public Text(Vector2 position, Color color, Vector2 origin)
-            : base(position)
+        public ScaleModifier(double duration, double fromX, double toX)
+            : this(duration, fromX, toX, null, LinearFuntion.Instance())
         {
-            Color = color;
-            TextRender = "";
-
-            Origin = origin;
         }
 
-        public Text(Vector2 position, Color color)
-            : base(position)
+        public ScaleModifier(double duration, double fromX, double toX,
+            IEntityModifierListener listener, IInterpolation function)
+            : base(duration, fromX, toX, listener, function)
         {
-            Color = color;
-            TextRender = "";
         }
+
         //================================================================
         //Getter and Setter
         //================================================================
-        public string TextRender
-        {
-            get { return text; }
-            set
-            {
-                text = value;
-            }
-        }
-
-        public SpriteFont Font { get; set; }
 
         //================================================================
         //Methodes
@@ -57,15 +38,17 @@ namespace WinEngine.Entity.UI
         //================================================================
         //Methodes overridde
         //================================================================
-
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void SetInitilizeValue(IEntity entity, double value)
         {
-            if (Visible && !TextRender.Equals(""))
-            {
-                spriteBatch.DrawString(Font, TextRender, Position, Color.Lerp(Color, Color.Transparent, Alpha),
-                    Rotation, Origin, Scaling, Flip, 0);
-            }
-            base.Draw(spriteBatch);
+            entity.Scaling = (float)value;
         }
+
+        public override void SetValue(IEntity entity, double percentage, double value)
+        {
+            entity.Scaling = (float)value;
+        }
+        // ===============================================================
+        // Inner and Anonymous Classes
+        // ===============================================================
     }
 }

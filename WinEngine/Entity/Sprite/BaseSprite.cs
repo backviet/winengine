@@ -62,6 +62,17 @@ namespace WinEngine.Entity.Sprite
             updates.Clear();
         }
 
+        public bool CollisionWith(IEntity entity)
+        {
+            if ((X < entity.X && X + Width > entity.X && Y < entity.Y && Y + Height > entity.Y)
+                || (entity.X < X && entity.X + entity.Width > X && entity.Y < Y && entity.Y + entity.Height > Y))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         //================================================================
         //Methodes overridde
         //================================================================

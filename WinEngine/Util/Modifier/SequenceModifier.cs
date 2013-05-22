@@ -54,6 +54,11 @@ namespace WinEngine.Util.Modifier
         //Getter and Setter
         //================================================================
         #region
+        public double SecondElapsedTime() 
+        {
+            return secondElapsed;
+        }
+
         public override double Duration
         {
             get { return duration; }

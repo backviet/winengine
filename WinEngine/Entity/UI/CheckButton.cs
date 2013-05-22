@@ -8,7 +8,7 @@ using WinEngine.Texture;
 
 namespace WinEngine.Entity.UI
 {
-    public class CheckButton: GameEntity, IOnClickListener
+    public class CheckButton: Widget, IOnClickListener
     {
         //================================================================
         //Constants

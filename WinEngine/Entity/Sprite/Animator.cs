@@ -7,7 +7,7 @@ using WinEngine.Util;
 
 namespace WinEngine.Entity.Sprite
 {
-    public class Animated : IUpdateHandler
+    public class Animator : IUpdateHandler
     {
         //================================================================
         //Constants
@@ -29,11 +29,11 @@ namespace WinEngine.Entity.Sprite
         private int timePerCycle;
 
         private int duration;
-        private double animationProcess;
+        private double AnimationProcess;
         //================================================================
         //Constructors
         //================================================================
-        public Animated(int time, int frame)
+        public Animator(int time, int frame)
         {
             duration = time;
             totalFrame = frame;
@@ -50,7 +50,7 @@ namespace WinEngine.Entity.Sprite
         //================================================================
         public int TotalFrame { get { return totalFrame; } set { totalFrame = value; } }
         public int Index { get { return frameIndex; } }
-        public double TimeProcess { get { return animationProcess; } }
+        public double TimeProcess { get { return AnimationProcess; } }
         public int CurrentLoop { get { return currentLoop; } }
         public int Duration { get { return duration; } }
         public bool IsFinished { get { return isFinished; } }
@@ -106,9 +106,9 @@ namespace WinEngine.Entity.Sprite
         {
             if (!isAnimationProcess) return;
 
-            animationProcess += gameTime.ElapsedGameTime.TotalMilliseconds;
+            AnimationProcess += gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (animationProcess > timePerCycle * currentLoop)
+            if (AnimationProcess > timePerCycle * currentLoop)
             {
                 if (currentLoop == countLoop)
                 {
@@ -120,7 +120,7 @@ namespace WinEngine.Entity.Sprite
 
             int index = 0;
 
-            index = (int)(animationProcess / duration);
+            index = (int)(AnimationProcess / duration);
 
             frameIndex = index % length;
             frameIndex += startFrame;
@@ -129,7 +129,7 @@ namespace WinEngine.Entity.Sprite
         public void Reset()
         {
             isFinished = false;
-            animationProcess = 0;
+            AnimationProcess = 0;
             frameIndex = 0;
             currentLoop = 0;
         }

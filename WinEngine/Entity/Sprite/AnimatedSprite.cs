@@ -21,7 +21,7 @@ namespace WinEngine.Entity.Sprite
         //================================================================
         protected TextureRegion[] regions;
 
-        protected Animated animation;
+        protected Animator animation;
 
         public event Action<AnimatedSprite> StartAnimation;
         public event Action<AnimatedSprite> FinishAnimation;
@@ -41,7 +41,7 @@ namespace WinEngine.Entity.Sprite
             this.regions = regions;
             if (isUpdate) updates = new List<IUpdateHandler>();
 
-            animation = new Animated(time, regions.Length);
+            animation = new Animator(time, regions.Length);
             countLoop = UNLIMITED;
         }
 
@@ -52,7 +52,7 @@ namespace WinEngine.Entity.Sprite
             if (isUpdate) updates = new List<IUpdateHandler>();
 
             countLoop = UNLIMITED;
-            animation = new Animated(time, regions.Length);
+            animation = new Animator(time, regions.Length);
         }
         //================================================================
         //Getter and Setter
@@ -130,6 +130,18 @@ namespace WinEngine.Entity.Sprite
         {
             updates.Clear();
         }
+
+        public bool CollisionWith(IEntity entity)
+        {
+            if ((X < entity.X && X + Width > entity.X && Y < entity.Y && Y + Height > entity.Y)
+                || (entity.X < X && entity.X + entity.Width > X && entity.Y < Y && entity.Y + entity.Height > Y))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         //================================================================
         //Methodes overridde
         //================================================================

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace WinEngine.Entity.UI
 {
-    public class TextInput : GameEntity, IOnClickListener
+    public class TextInput : Widget, IOnClickListener
     {
         //================================================================
         //Constants
