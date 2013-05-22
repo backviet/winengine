@@ -10,7 +10,7 @@ using WinEngine.Texture;
 
 namespace WinEngine.Entity.UI
 {
-    public class Button : GameEntity, IOnClickListener
+    public class Button : Widget, IOnClickListener
     {
         //================================================================
         //Constants
@@ -53,10 +53,14 @@ namespace WinEngine.Entity.UI
         //================================================================
         //Methodes
         //================================================================
+        public void SetOriginCenter()
+        {
+            Origin = new Vector2(regions[0].Bounds.Width / 2, regions[0].Bounds.Height / 2);
+        }
 
         public bool Contains(Vector2 point)
         {
-            return Contains(point, (int)Position.X, (int)Position.Y,
+            return Contains(point, (int)(X - Origin.X), (int)(Y - Origin.Y),
                  regions[index].Bounds.Width, regions[index].Bounds.Height);
         }
 
@@ -83,8 +87,7 @@ namespace WinEngine.Entity.UI
 
         public bool OnClick(TouchLocation touch)
         {
-            if (Contains(touch.Position, (int)Position.X, (int)Position.Y,
-                regions[index].Bounds.Width, regions[index].Bounds.Height))
+            if (Contains(touch.Position))
             {
                 if (touch.State == TouchLocationState.Pressed)
                 {

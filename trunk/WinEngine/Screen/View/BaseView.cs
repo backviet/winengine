@@ -23,7 +23,9 @@ namespace WinEngine.Screen.View
         //================================================================
         //Fields
         //================================================================
-        protected List<IEntity> childrens;
+        public event Action<BaseView> ActionClicked;
+
+        protected List<Widget> childrens;
         private List<IOnClickListener> clickListener;
         private ViewBackground background;
 
@@ -33,6 +35,7 @@ namespace WinEngine.Screen.View
 
         private Vector2 position;
 
+        private bool isOnViewClick = false;
         public int countchildren = 0;
         //================================================================
         //Constructors
@@ -44,12 +47,13 @@ namespace WinEngine.Screen.View
             camera = new Camera2d(game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height);
             camera.Position = new Vector2(camera.width / 2, camera.height / 2);
 
-            childrens = new List<IEntity>();
+            childrens = new List<Widget>();
             clickListener = new List<IOnClickListener>();
 
             Position = position;
             background = new ViewBackground(position);
             background.Background(this, camera.width, camera.height);
+            DrawBackground = true;
         }
 
         //================================================================
@@ -83,9 +87,23 @@ namespace WinEngine.Screen.View
         //================================================================
         public bool Visible { get; set; }
         public SpriteFont Font { get; set; }
+        public bool DrawBackground { get; set; }
 
         #region Widget && OnClickListener
-        public void AddChild(IEntity entity, bool isText)
+        public void BuildUI()
+        {
+            foreach (Widget widget in childrens)
+            {
+                widget.BuildUI();
+            }
+        }
+
+        public void AddChild(Widget entity)
+        {
+            AddChild(entity, false);
+        }
+
+        public void AddChild(Widget entity, bool isText)
         {
             if (entity == null || childrens.Contains(entity))
             {
@@ -100,6 +118,11 @@ namespace WinEngine.Screen.View
             countchildren++;
         }
 
+        public void OnViewClick(bool isOnClick)
+        {
+            isOnViewClick = isOnClick;
+        }
+
         public void RegisterClick(IOnClickListener listener)
         {
             if (listener == null || clickListener.Contains(listener))
@@ -109,7 +132,7 @@ namespace WinEngine.Screen.View
             clickListener.Add(listener);
         }
 
-        public void RemoveChild(IEntity entity)
+        public void RemoveChild(Widget entity)
         {
             countchildren--;
             if (entity == null)
@@ -169,7 +192,7 @@ namespace WinEngine.Screen.View
             if (Visible)
             {
                 spriteBatch.Begin();
-                if (background != null)
+                if (DrawBackground && background != null)
                 {
                     background.Draw(spriteBatch);
                 }
@@ -187,8 +210,12 @@ namespace WinEngine.Screen.View
 
         public bool OnClick(TouchLocation touch)
         {
-            if (Visible)
+            if (Visible && isOnViewClick)
             {
+                if (ActionClicked != null)
+                {
+                    ActionClicked(this);
+                }
                 foreach (IOnClickListener click in clickListener)
                 {
                     if (click.OnClick(touch))
@@ -200,6 +227,14 @@ namespace WinEngine.Screen.View
             }
 
             return true;
+        }
+
+        public virtual void Reset()
+        {
+            foreach (Widget widget in childrens)
+            {
+                widget.Reset();
+            }
         }
         //================================================================
         //Methodes overridde
@@ -246,7 +281,7 @@ namespace WinEngine.Screen.View
 
                 for (int i = colors.Length - 1; i != -1; i--)
                 {
-                    colors[i] = new Color(0.0f, 0.0f, 0.0f, 0.4f);
+                    colors[i] = new Color(0.0f, 0.0f, 0.0f, 0.7f);
                 }
                 texture.SetData(colors);
             }

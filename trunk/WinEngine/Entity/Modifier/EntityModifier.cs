@@ -2,6 +2,19 @@ using WinEngine.Util.Modifier;
 
 namespace WinEngine.Entity.Modifier
 {
+    public abstract class EntityModifier : BaseModifier<IEntity>, IEntityModifier
+    {
+        public EntityModifier()
+            : base()
+        {
+        }
+
+        public EntityModifier(IEntityModifierListener listener)
+            : base(listener)
+        {
+        }
+    }
+
     public interface IEntityModifier : IModifier<IEntity>
     {
         

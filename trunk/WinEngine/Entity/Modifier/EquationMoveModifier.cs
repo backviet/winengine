@@ -1,18 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using WinEngine.Util.Interpolation;
 
-using WinEngine.Texture;
-using WinEngine.Util;
-using WinEngine.Entity.Modifier;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace WinEngine.Entity.Sprite
+namespace WinEngine.Entity.Modifier
 {
-    public class SingleSprite : GameEntity
+    public class EquationMoveModifier : SingleSpanEntityModifier
     {
         //================================================================
         //Constants
@@ -21,57 +11,61 @@ namespace WinEngine.Entity.Sprite
         //================================================================
         //Fields
         //================================================================
-        protected TextureRegion region;
+        private IEquation equation;
 
         //================================================================
         //Constructors
         //================================================================
-        public SingleSprite(Vector2 postion, TextureRegion region)
-            : base(postion)
+        public EquationMoveModifier(double duration, double fromX, double toX)
+            : this(duration, fromX, toX, null, LinearFuntion.Instance())
         {
-            this.region = region;
+        }
 
-            Width = region.Bounds.Width;
-            Height = region.Bounds.Height;
+        public EquationMoveModifier(double duration, double fromX, double toX,
+            IEntityModifierListener listener, IInterpolation function)
+            : base(duration, fromX, toX, listener, function)
+        {
         }
 
         //================================================================
         //Getter and Setter
         //================================================================
+        public void Equation(IEquation equation)
+        {
+            this.equation = equation;
+        }
 
         //================================================================
         //Methodes
         //================================================================
-        public bool CollisionWith(IEntity entity)
-        {
-            if ((X < entity.X && X + Width > entity.X && Y < entity.Y && Y + Height > entity.Y)
-                || (entity.X < X && entity.X + entity.Width > X && entity.Y < Y && entity.Y + entity.Height > Y))
-            {
-                return true;
-            }
-
-            return false;
-        }
 
         //================================================================
         //Methodes overridde
         //================================================================
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public override void SetInitilizeValue(IEntity entity, double value)
         {
-            if (Visible)
+            entity.X = (float)value;
+            if (equation != null)
             {
-                spriteBatch.Draw(region.Texture, Position, region.Bounds,
-                Color.Lerp(Color.White, Color.Transparent, Alpha), Rotation, Origin, Scaling, Flip, 0);
+                equation.CalculateY(entity);
             }
         }
 
-        public virtual void Update(GameTime gameTime)
+        public override void SetValue(IEntity entity, double percentage, double value)
         {
-            base.Update(gameTime);
+            entity.X = (float)value;
+            if (equation != null)
+            {
+                equation.CalculateY(entity);
+            }
         }
-
         // ===============================================================
         // Inner and Anonymous Classes
         // ===============================================================
+    }
+
+    public interface IEquation
+    {
+        void CalculateY(IEntity entity);
     }
 }

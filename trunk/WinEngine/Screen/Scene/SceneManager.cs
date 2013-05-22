@@ -46,6 +46,11 @@ namespace WinEngine.Screen.Scene
                 return scenes[name];
             return null;
         }
+
+        public static string Privious()
+        {
+            return privious.Name;
+        }
         //================================================================
         //Methodes
         //================================================================
@@ -106,6 +111,10 @@ namespace WinEngine.Screen.Scene
                     else if (current.IsShutDown)
                     {
                         current.Reset();
+                    }
+                    else
+                    {
+                        current.Show();
                     }
                 }
             }

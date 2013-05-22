@@ -1,57 +1,65 @@
 using System;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input.Touch;
 
-using WinEngine.Texture;
+using WinEngine.Entity;
+using WinEngine.Util;
 
-namespace WinEngine.Entity.UI
+namespace WinEngine.Screen.Scene
 {
-    public class Image : Widget
+    public abstract class Layer
     {
         //================================================================
         //Constants
         //================================================================
+        public const int CHILDREN_DEFAULT = 4;
 
         //================================================================
         //Fields
         //================================================================
-        private TextureRegion region;
+        protected List<IEntity> children = new List<IEntity>(CHILDREN_DEFAULT);
 
         //================================================================
         //Constructors
         //================================================================
-        public Image(Vector2 position, TextureRegion region)
-            : base(position)
-        {
-            this.region = region;
-            Width = region.Bounds.Width;
-            Height = region.Bounds.Height;
-        }
 
         //================================================================
         //Getter and Setter
         //================================================================
-        public TextureRegion Region { get { return region; } set { this.region = value; } }
+        #region
+        public bool NeedSort { get; set; }
 
+        #endregion
         //================================================================
         //Methodes
         //================================================================
         #region
+        public void Sort()
+        {
+            ZIndexSorter.Instance().Sort(children);
+        }
+
+        public void Sort(IComparator<IEntity> comparator)
+        {
+            ZIndexSorter.Instance().Sort(children, comparator);
+        }
+
         #endregion
         //================================================================
-        //Methodes overridde
+        //Methods for/from SuperClass/Interfaces
         //================================================================
         #region
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (Visible)
-            {
-                spriteBatch.Draw(region.Texture, Position, region.Bounds,
-                    Color.Lerp(Color.White, Color.Transparent, Alpha), Rotation, Origin, Scaling, Flip, 0);
-            }
-            base.Draw(spriteBatch);
-        }
+        public abstract void Create();
+        public abstract void OnTouchEvent(TouchLocation touchLocation);
+        public abstract void Update(GameTime gameTime);
+        public abstract void Draw();
+        public abstract void Reset();
+
         #endregion
+        // ===============================================================
+        // Inner and Anonymous Classes
+        // ===============================================================
     }
 }

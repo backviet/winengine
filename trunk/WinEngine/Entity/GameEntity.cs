@@ -25,6 +25,7 @@ namespace WinEngine.Entity
 
         protected Vector2 position;
 
+        private List<IUpdateHandler> updateHandlers;
         private EntityModifierList modifiers;
 
         //================================================================
@@ -33,6 +34,7 @@ namespace WinEngine.Entity
         public GameEntity(Vector2 pos)
         {
             Position = pos;
+            InitPosition = new Vector2(pos.X, pos.Y);
 
             Visible = true;
 
@@ -61,6 +63,13 @@ namespace WinEngine.Entity
         //================================================================
         public virtual void Update(GameTime gameTime)
         {
+            if (updateHandlers != null)
+            {
+                foreach (IUpdateHandler update in updateHandlers)
+                {
+                    update.Update(gameTime);
+                }
+            }
             if (modifiers != null)
             {
                 modifiers.Update(gameTime);
@@ -80,13 +89,17 @@ namespace WinEngine.Entity
 
         public virtual void Reset()
         {
+            ClearModifier();
+
+            X = InitPosition.X;
+            Y = InitPosition.Y;
+
             Visible = true;
 
             Alpha = 0;
             Rotation = 0;
             Scaling = 1;
             IgnoreUpdate = false;
-            Origin = Vector2.Zero;
             Flip = SpriteEffects.None;
         }
 
@@ -123,7 +136,7 @@ namespace WinEngine.Entity
                 modifiers.Remove(modifier);
         }
 
-        public void ClearEntityModifier()
+        public void ClearModifier()
         {
             if (modifiers != null)
             {
@@ -136,6 +149,14 @@ namespace WinEngine.Entity
             get { return this.position; }
             set { this.position = value; }
         }
+
+        public Vector2 InitPosition { get; set; }
+
+        public bool IsModifying
+        {
+            get { return modifiers != null && modifiers.Count > 0 ? true : false; }
+        }
+
         public float X
         { 
             get { return this.position.X; }
@@ -294,6 +315,36 @@ namespace WinEngine.Entity
         // ===============================================================
 
 
+
+        public void RegisterUpdateHandler(IUpdateHandler updateHandler)
+        {
+            if (updateHandlers == null)
+            {
+                updateHandlers = new List<IUpdateHandler>();
+            }
+            if (updateHandler == null)
+            {
+                return;
+            }
+            updateHandlers.Add(updateHandler);
+        }
+
+        public void UnRegisterUpdateHandler(IUpdateHandler updateHandler)
+        {
+            if (updateHandler == null || updateHandlers == null)
+            {
+                return;
+            }
+            updateHandlers.Remove(updateHandler);
+        }
+
+        public void ClearUpdateHandler()
+        {
+            if (updateHandlers != null)
+            {
+                updateHandlers.Clear();
+            }
+        }
     }
 
     public class CompareEntity
@@ -317,11 +368,13 @@ namespace WinEngine.Entity
         float Scaling { get; set; }
         float Rotation { get; set; }
 
+        bool IsModifying { get; }
         bool Visible { get; set; }
         bool IgnoreUpdate { get; set; }
         bool HasParent { get; set; }
         bool Contains(Vector2 point, int x, int y, int width, int height);
 
+        Vector2 InitPosition { get; set; }
         Vector2 Position { get; set; }
 
         IEntity Parent { get; set; }
@@ -339,9 +392,12 @@ namespace WinEngine.Entity
         void SortChildren();
         void SortChildren(IComparator<IEntity> compare);
 
+        void RegisterUpdateHandler(IUpdateHandler updateHandler);
+        void UnRegisterUpdateHandler(IUpdateHandler updateHandler);
+        void ClearUpdateHandler();
         void RegisterModifier(IEntityModifier modifier);
         void UnregisterModifier(IEntityModifier modifier);
-        void ClearEntityModifier();
+        void ClearModifier();
 
         void Draw(SpriteBatch spriteBatch);
         void Update(GameTime gameTime);

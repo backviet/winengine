@@ -1,0 +1,6 @@
+C:\Users\quan\Documents\Visual Studio 2012\Projects\Game\WPGameUtility\obj\Windows Phone\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\quan\Documents\Visual Studio 2012\Projects\Game\WPGameUtility\bin\Windows Phone\Debug\WinEngine.dll
+C:\Users\quan\Documents\Visual Studio 2012\Projects\Game\WPGameUtility\bin\Windows Phone\Debug\WinEngine.pdb
+C:\Users\quan\Documents\Visual Studio 2012\Projects\Game\WPGameUtility\obj\Windows Phone\Debug\WinEngine.dll
+C:\Users\quan\Documents\Visual Studio 2012\Projects\Game\WPGameUtility\obj\Windows Phone\Debug\WinEngine.pdb
+C:\Users\quan\Documents\Visual Studio 2012\Projects\Game\WPGameUtility\obj\Windows Phone\Debug\WinEngine.csprojResolveAssemblyReference.cache
